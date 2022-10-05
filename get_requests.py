@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def create_soup(url):
+def create_soup(url: str) -> object:
 	page = requests.get(url)
 	soup = BeautifulSoup(page.content, "html.parser")
 	return soup
@@ -10,13 +10,12 @@ def create_soup(url):
 # URL = "https://info.nsf.org/Certified/Common/Company.asp?CompanyName=3m&Standard=061"
 stirred_soup = create_soup("https://realpython.github.io/fake-jobs/")
 
-
-def find_soup_results(soup):
+def find_soup_results(soup: object) -> object:
 	results = soup.find(id="ResultsContainer")
 	return results
 
-soup_results = find_soup_results(stirred_soup)
 
+soup_results = find_soup_results(stirred_soup)
 
 def get_job_elements(soupy_results: object) -> list:
 	"""
