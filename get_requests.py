@@ -40,7 +40,7 @@ def get_job_elements(soupy_results: object) -> list:
 
 
 all_processed_jobs = get_job_elements(soup_results)
-print(all_processed_jobs)
+# print(all_processed_jobs)
 
 
 def desired_jobs_only(scraped_jobs: list, *titles: str) -> list:
