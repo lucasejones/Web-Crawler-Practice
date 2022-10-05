@@ -1,6 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
 
+"""
+This module focuses on scraping a hypothetical job listings website. 
+Conceptually, it performs the following steps: 
+	1. Requests the URL using the built-in requests library
+	2. Parses its HTML using Beautiful Soup
+	3. Identifies only the relevant information from any given job listing (title, company, location, and application link)
+	4. Allows the user to filter further by providing as many desired job titles as they like
+	5. Outputs all relevant data that reflects those job listings.
+"""
 
 def create_soup(url: str) -> object:
 	page = requests.get(url)
@@ -20,7 +29,7 @@ soup_results = find_soup_results(stirred_soup)
 def get_job_elements(soupy_results: object) -> list:
 	"""
 	Takes a beautiful soup object.
-	Returns all jobs as a list of tuples, each containing the job title, the company name, and the location
+	Returns all jobs as a list of tuples, each containing the job title, the company name, the location, and a link through which to apply
 	"""
 
 	job_elements = soupy_results.find_all('div', class_='card-content')
@@ -30,10 +39,11 @@ def get_job_elements(soupy_results: object) -> list:
 
 	all_jobs = []
 	for job_element in job_elements:
+		application_link = job_element.find_all('a')[1]['href']
 		title_element = job_element.find('h2', class_='title')
 		company_element = job_element.find('h3', class_='subtitle')
 		location_element = job_element.find('p', class_='location')
-		all_jobs.append((title_element.text.strip(), company_element.text.strip(), location_element.text.strip()))
+		all_jobs.append((title_element.text.strip(), company_element.text.strip(), location_element.text.strip(), application_link))
 
 	return all_jobs
 
@@ -58,8 +68,12 @@ def desired_jobs_only(scraped_jobs: list, *titles: str) -> list:
 	return desired_jobs
 
 
-odd_jobs = desired_jobs_only(all_processed_jobs, 'broker', 'barrister', 'radiographer')
+"""
+This is where you can easily change this crawler to provide useful responses based on whatever job titles you're looking for. 
+"""
 dev_jobs = desired_jobs_only(all_processed_jobs, 'developer', 'programmer', 'software')
+odd_jobs = desired_jobs_only(all_processed_jobs, 'broker', 'barrister', 'radiographer')
+
 
 
 ## optional printed ouputs 
@@ -72,15 +86,17 @@ dev_jobs = desired_jobs_only(all_processed_jobs, 'developer', 'programmer', 'sof
 # print('_' * 40)
 
 
-def output_useful_job_details(desired_jobs: list) -> None:
+def output_useful_job_details(wanted_jobs: list) -> None:
 	"""
 	Takes the desired jobs as a list of tuples and prints it in a more readable format.
 	"""
 
 	print('_' * 40)
 	print('All matching open roles: ', '\n')
-	for role in desired_jobs:
-		print(role)
+	for role in wanted_jobs:
+		print('Details: ', role[:-1])
+		print('Apply here:', role[-1])
+		print()
 
 
 print(output_useful_job_details(dev_jobs))
