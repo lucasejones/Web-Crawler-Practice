@@ -11,8 +11,6 @@ def main():
 	formatted_title_inputs = title_inputs.split(' ')
 	print(formatted_title_inputs)
 
-	# print(type(title_inputs))
-
 	dev_jobs = file.desired_jobs_only(all_processed_jobs, 'developer', 'programmer', 'software')
 	odd_jobs = file.desired_jobs_only(all_processed_jobs, 'broker', 'barrister', 'radiographer')
 	unique_jobs = file.desired_jobs_only_list(all_processed_jobs, formatted_title_inputs)

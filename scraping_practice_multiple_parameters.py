@@ -90,5 +90,5 @@ def output_useful_job_details(wanted_jobs: list) -> None:
 
 
 if __name__ == "__main__":
-	print('this should not be printing')
+	pass
 	
