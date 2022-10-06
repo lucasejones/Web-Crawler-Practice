@@ -11,20 +11,19 @@ Conceptually, it performs the following steps:
 	5. Outputs all relevant data that reflects those job listings.
 """
 
+
 def create_soup(url: str) -> object:
 	page = requests.get(url)
 	soup = BeautifulSoup(page.content, "html.parser")
 	return soup
 
 # URL = "https://info.nsf.org/Certified/Common/Company.asp?CompanyName=3m&Standard=061"
-stirred_soup = create_soup("https://realpython.github.io/fake-jobs/")
+
 
 def find_soup_results(soup: object) -> object:
 	results = soup.find(id="ResultsContainer")
 	return results
 
-
-soup_results = find_soup_results(stirred_soup)
 
 def get_job_elements(soupy_results: object) -> list:
 	"""
@@ -33,9 +32,6 @@ def get_job_elements(soupy_results: object) -> list:
 	"""
 
 	job_elements = soupy_results.find_all('div', class_='card-content')
-
-	# for job_element in job_elements:
-	# 	print(job_element, end='\n' * 2) 
 
 	all_jobs = []
 	for job_element in job_elements:
@@ -48,14 +44,10 @@ def get_job_elements(soupy_results: object) -> list:
 	return all_jobs
 
 
-all_processed_jobs = get_job_elements(soup_results)
-# print(all_processed_jobs)
-
-
-def desired_jobs_only(scraped_jobs: list, *titles: str) -> list:
+def desired_jobs_only_list(scraped_jobs: list, titles: list) -> list:
 	"""
-	Takes a list of jobs and an arbitrary number of job titles you'd like to identify from that list. 
-	Returns: A list of tuples containing only jobs relevant to the passedd titles
+	Takes a list of jobs and a list of job titles you'd like to identify.
+	Returns: A list of tuples containing only jobs relevant to the passed titles
 	"""
 
 	desired_jobs = []
@@ -68,22 +60,20 @@ def desired_jobs_only(scraped_jobs: list, *titles: str) -> list:
 	return desired_jobs
 
 
-"""
-This is where you can easily change this crawler to provide useful responses based on whatever job titles you're looking for. 
-"""
-dev_jobs = desired_jobs_only(all_processed_jobs, 'developer', 'programmer', 'software')
-odd_jobs = desired_jobs_only(all_processed_jobs, 'broker', 'barrister', 'radiographer')
+def desired_jobs_only(scraped_jobs: list, *titles: str) -> list:
+	"""
+	Takes a list of jobs and an arbitrary number of job titles you'd like to identify from that list. 
+	Returns: A list of tuples containing only jobs relevant to the passed titles
+	"""
 
+	desired_jobs = []
 
+	for job in scraped_jobs:
+		for title in titles:
+			if title in job[0].lower():
+				desired_jobs.append(job)
 
-## optional printed ouputs 
-# print('_' * 40)
-# print('All job titles: ', '\n')
-# print(all_processed_jobs)
-# print('_' * 40)
-# print('Desired jobs only: ', '\n')
-# print(desired_jobs_only(all_processed_jobs, 'broker', 'barrister', 'radiographer'))
-# print('_' * 40)
+	return desired_jobs
 
 
 def output_useful_job_details(wanted_jobs: list) -> None:
@@ -92,12 +82,13 @@ def output_useful_job_details(wanted_jobs: list) -> None:
 	"""
 
 	print('_' * 40)
-	print('All matching open roles: ', '\n')
+	print(f'{len(wanted_jobs)} matching open roles: ', '\n')
 	for role in wanted_jobs:
 		print('Details: ', role[:-1])
 		print('Apply here:', role[-1])
 		print()
 
 
-print(output_useful_job_details(dev_jobs))
-
+if __name__ == "__main__":
+	print('this should not be printing')
+	
