@@ -1,23 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 
-"""
-This module focuses on scraping a hypothetical job listings website. 
-Conceptually, it performs the following steps: 
-	1. Requests the URL using the built-in requests library
-	2. Parses its HTML using Beautiful Soup
-	3. Identifies only the relevant information from any given job listing (title, company, location, and application link)
-	4. Allows the user to filter further by providing as many desired job titles as they like
-	5. Outputs all relevant data that reflects those job listings.
-"""
-
 
 def create_soup(url: str) -> object:
 	page = requests.get(url)
 	soup = BeautifulSoup(page.content, "html.parser")
 	return soup
-
-# URL = "https://info.nsf.org/Certified/Common/Company.asp?CompanyName=3m&Standard=061"
 
 
 def find_soup_results(soup: object) -> object:
@@ -87,8 +75,3 @@ def output_useful_job_details(wanted_jobs: list) -> None:
 		print('Details: ', role[:-1])
 		print('Apply here:', role[-1])
 		print()
-
-
-if __name__ == "__main__":
-	pass
-	
