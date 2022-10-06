@@ -64,14 +64,16 @@ def desired_jobs_only(scraped_jobs: list, *titles: str) -> list:
 	return desired_jobs
 
 
-def output_useful_job_details(wanted_jobs: list) -> None:
+def output_useful_job_details(jobs_scrape: list, titles: list) -> None:
 	"""
-	Takes the desired jobs as a list of tuples and prints it in a more readable format.
+	Takes the scraped information for desired jobs as a list of tuples, and the name of the
+	titles as a list of strings.
+	Prints it in a more readable format.
 	"""
 
 	print('_' * 40)
-	print(f'{len(wanted_jobs)} matching open roles: ', '\n')
-	for role in wanted_jobs:
+	print(f'{len(jobs_scrape)} matching open roles for "{" ".join(titles)}": ', '\n')
+	for role in jobs_scrape:
 		print('Details: ', role[:-1])
 		print('Apply here:', role[-1])
 		print()
