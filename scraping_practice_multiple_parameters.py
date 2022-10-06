@@ -3,23 +3,24 @@ from bs4 import BeautifulSoup
 
 
 def create_soup(url: str) -> object:
+	"""
+	Takes the url of the page you'd like to scrape.
+	Returns the html as a beautiful soup object
+	"""
 	page = requests.get(url)
 	soup = BeautifulSoup(page.content, "html.parser")
 	return soup
 
 
-def find_soup_results(soup: object) -> object:
-	results = soup.find(id="ResultsContainer")
-	return results
-
-
 def get_job_elements(soupy_results: object) -> list:
 	"""
 	Takes a beautiful soup object.
-	Returns all jobs as a list of tuples, each containing the job title, the company name, the location, and a link through which to apply
+	Returns: all jobs as a list of tuples. Each tuple contains the job title, the company name,
+	the location, and a link through which to apply
 	"""
 
-	job_elements = soupy_results.find_all('div', class_='card-content')
+	results_container = soupy_results.find(id="ResultsContainer")
+	job_elements = results_container.find_all('div', class_='card-content')
 
 	all_jobs = []
 	for job_element in job_elements:

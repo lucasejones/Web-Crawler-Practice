@@ -10,19 +10,15 @@ Conceptually, it performs the following steps:
 	5. Outputs all relevant data that reflects those job listings.
 """
 
-stirred_soup = file.create_soup("https://realpython.github.io/fake-jobs/")
+soup = file.create_soup("https://realpython.github.io/fake-jobs/")
 # future URL = "https://info.nsf.org/Certified/Common/Company.asp?CompanyName=3m&Standard=061"
 
-soup_results = file.find_soup_results(stirred_soup)
-all_processed_jobs = file.get_job_elements(soup_results)
+all_processed_jobs = file.get_job_elements(soup)
 
 # This is where you can easily create useful responses by specifying specific job titles you're seeking.
 title_inputs = input('Enter the job titles you\'re looking for, separated by a space: ')
 formatted_title_inputs = title_inputs.split(' ')
 
-dev_jobs = file.desired_jobs_only(all_processed_jobs, 'developer', 'programmer', 'software')
-odd_jobs = file.desired_jobs_only(all_processed_jobs, 'broker', 'barrister', 'radiographer')
-unique_jobs = file.desired_jobs_only_list(all_processed_jobs, formatted_title_inputs)
+input_jobs = file.desired_jobs_only_list(all_processed_jobs, formatted_title_inputs)
 
-print(file.output_useful_job_details(unique_jobs, formatted_title_inputs))
-# URL = "https://info.nsf.org/Certified/Common/Company.asp?CompanyName=3m&Standard=061"
+print(file.output_useful_job_details(input_jobs, formatted_title_inputs))
