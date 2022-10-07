@@ -1,4 +1,4 @@
-import scraping_practice_multiple_parameters as file
+import parsing_functions as file
 
 """
 This module focuses on scraping a hypothetical job listings website. 
