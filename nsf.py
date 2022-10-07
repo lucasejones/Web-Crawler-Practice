@@ -41,15 +41,24 @@ for company in companies:
 	all_companies[company_name] = products_link
 
 
-for k, v in all_companies.items():
-	print(k, v)
-	
+# for k, v in all_companies.items():
+	# print(k, v)
 
-# desired_jobs = []
-# 	for job in scraped_jobs:
-# 		for title in titles:
-# 			if title in job[0].lower():
-# 				desired_jobs.append(job)
+
+title_input = input('Enter the company name that manufactures the product in question: ')
+
+desired_companies = {}
+for company in all_companies:
+	if title_input in company.lower().strip(',.'):
+			desired_companies[company] = all_companies[company]
+
+print('_' * 40)
+print(f'{len(desired_companies)} matching open roles for "{title_input}": ', '\n')
+for company in desired_companies:
+	print('Company name: ', company)
+	print('Details:', desired_companies[company])
+	print()
+
 
 
 # concept:
