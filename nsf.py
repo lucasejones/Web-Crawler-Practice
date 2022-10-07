@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 companies_url = 'https://info.nsf.org/Certified/Common/Company.asp?CompanyName=&Standard=061'
 chemicals_url = 'https://info.nsf.org/Certified/Common/Company.asp?Standard=060'
+# page = requests.get(chemicals_url)
 page = requests.get(companies_url)
 soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -20,50 +21,36 @@ for company in companies:
 	company_name = company.find('a').text.strip()
 
 
-	# # duplicate handling (under construction)
-	# entry_count = 2
-	# while True:
-	# 	if company_name in all_companies:
-	# 		initial_entry_substring = f'(entry {entry_count})'
-	# 		entry_count += 1
-	#
-	# 		if entry_count == 3:
-	# 			company_name = company_name + ' ' + initial_entry_substring
-	# 			all_companies[company_name] = products_link
-	#
-	# 		elif entry_count > 3:
-	# 			print(company_name, entry_count)
-	# 			break
-	# 			updated_entry_substring = f'(entry {entry_count})'
-	# 			company_name = company_name.replace(f'(entry {entry_count - 1})',
-	# 												updated_entry_substring)
-	# 				# first time this runs:
-	# 				# initial entry substring is set to 3, updated is set to 4.
-	# 				# but 3 entry 3 never exists in this elif block.
-	# 			all_companies[company_name] = products_link
-	# 			entry_count += 1
-	# 	else:
-	# 		break
+	# duplicate handling
+	entry_count = 2
+	while True:
+		if company_name in all_companies:
+			if entry_count == 2:
+				company_name = company_name + ' (entry 2)'
+				entry_count += 1
 
+			elif entry_count > 2:
+				previous_entry_substring = f'(entry {entry_count - 1})'
+				updated_entry_substring = f'(entry {entry_count})'
+				company_name = company_name.replace(previous_entry_substring,
+													updated_entry_substring)
+				entry_count += 1
+		else:
+			break
 
 	all_companies[company_name] = products_link
 
 
 for k, v in all_companies.items():
-	if 'entry' in k:
-		print(k, v)
-	else:
-		print(k, v)
+	print(k, v)
+	
 
+# desired_jobs = []
+# 	for job in scraped_jobs:
+# 		for title in titles:
+# 			if title in job[0].lower():
+# 				desired_jobs.append(job)
 
-# company_name = 'test company'
-# initial_entry_substring = '(entry 2)'
-# new_substring = '(entry 3)'
-#
-# company_name = company_name + ' ' + initial_entry_substring
-# company_name = company_name.replace(initial_entry_substring, new_substring)
-
-# print(company_name)
 
 # concept:
 # to incorporate multiple sites, you need to build multiple unique scrapers.
@@ -76,3 +63,10 @@ for k, v in all_companies.items():
 # outside that, make a module that imports these 7 and stores their ran outputs in a super structure
 	# this module contains only function definitions
 # main would then import and run this other module, along with any other necessary logic.
+
+# future steps:
+# could also put the results from all 7 sites into a database, and when the user starts typing it
+# queries the database and auto-completes any matching results (name + link) underneath.
+	# when the user presses enter in their search, whatever links are displayed underneath become
+	# clickable, which when clicked redirect to the corresponding certification site.
+# consider including some feature that indicates multiple certifications
