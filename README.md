@@ -9,7 +9,7 @@ While the other repo is focused on creating the site the engineer will ultimatel
 this repo focuses on building the web scraping tools that will supply the data to that site.
 
 ### Example
-Typing 'vic' into the search bar would display the names of the 5 entries on the National 
+Typing 'victa' into the search bar would display the names of the 5 entries on the National 
 Sanitation Foundation website related to 
 the company "Victaulic", the organization designation of NSF, as well as links for each entry.
 

@@ -80,16 +80,15 @@ def get_desired_companies_only(scraped_companies: dict, name: str) -> dict:
 
 
 
-def output_useful_company_details(companies_scrape: dict, name: str) -> None:
+def output_useful_company_details(user_companies: dict, name: str) -> None:
 	"""
-	Takes the scraped information for desired jobs as a list of tuples, and the name of the
-	titles as a list of strings.
-	Prints it in a more readable format.
+	Takes the scraped information for desired companies as a dict, and the user-input company
+	name as a string and prints it in a more readable format.
 	"""
 
 	print('_' * 40)
-	print(f'{len(companies_scrape)} matching listings for "{name}": ', '\n')
-	for company in companies_scrape:
+	print(f'{len(user_companies)} matching listings for "{name}": ', '\n')
+	for company in user_companies:
 		print('Company name: ', company)
-		print('Details:', companies_scrape[company])
+		print('Details:', user_companies[company])
 		print()
