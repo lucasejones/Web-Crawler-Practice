@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 
 companies_url = 'https://info.nsf.org/Certified/Common/Company.asp?CompanyName=&Standard=061'
 chemicals_url = 'https://info.nsf.org/Certified/Common/Company.asp?Standard=060'
+# include units url as well
+
 # page = requests.get(chemicals_url)
 page = requests.get(companies_url)
 soup = BeautifulSoup(page.content, 'html.parser')
@@ -49,11 +51,11 @@ title_input = input('Enter the company name that manufactures the product in que
 
 desired_companies = {}
 for company in all_companies:
-	if title_input in company.lower().strip(',.'):
+	if title_input in company.lower().strip(',.') or title_input in company.strip(',.'):
 			desired_companies[company] = all_companies[company]
 
 print('_' * 40)
-print(f'{len(desired_companies)} matching open roles for "{title_input}": ', '\n')
+print(f'{len(desired_companies)} matching listings for "{title_input}": ', '\n')
 for company in desired_companies:
 	print('Company name: ', company)
 	print('Details:', desired_companies[company])
