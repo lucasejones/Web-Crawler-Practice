@@ -63,7 +63,7 @@ def handle_duplicates(companies_dict: dict, name: str) -> str:
 	return name
 
 
-def desired_companies_only(scraped_companies: dict, name: str) -> dict:
+def get_desired_companies_only(scraped_companies: dict, name: str) -> dict:
 	"""
 	Takes the dictionary of scraped companies and the company name input by the user.
 	Returns: A dictionary containing only companies relevant to the user input, where the key is

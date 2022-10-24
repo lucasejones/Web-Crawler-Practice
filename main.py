@@ -17,5 +17,5 @@ all_processed_companies = file.get_company_elements(soup)
 
 title_input = input('Enter the company name that manufactures the product in question: ')
 
-input_companies = file.desired_companies_only(all_processed_companies, title_input)
+input_companies = file.get_desired_companies_only(all_processed_companies, title_input)
 file.output_useful_company_details(input_companies, title_input)
