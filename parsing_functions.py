@@ -7,65 +7,80 @@ def create_soup(url: str) -> object:
 	Takes the url of the page you'd like to scrape.
 	Returns the html as a beautiful soup object
 	"""
+
 	page = requests.get(url)
-	soup = BeautifulSoup(page.content, "html.parser")
+	soup = BeautifulSoup(page.content, 'html.parser')
 	return soup
 
 
-def get_job_elements(soupy_results: object) -> list:
+def get_company_elements(soup_results: object) -> dict:
 	"""
 	Takes a beautiful soup object.
-	Returns: all jobs as a list of tuples. Each tuple contains the job title, the company name,
-	the location, and a link through which to apply
+	Returns: all companies as a dictionary, where each key is the company name and each value is
+	the corresponding link to the company's certification details page.
 	"""
 
-	results_container = soupy_results.find(id="ResultsContainer")
-	job_elements = results_container.find_all('div', class_='card-content')
+	content_area = soup_results.find(id='content-area')
+	# print(content_area)
+	companies = content_area.find_all('table')
 
-	all_jobs = []
-	for job_element in job_elements:
-		application_link = job_element.find_all('a')[1]['href']
-		title_element = job_element.find('h2', class_='title')
-		company_element = job_element.find('h3', class_='subtitle')
-		location_element = job_element.find('p', class_='location')
-		all_jobs.append((title_element.text.strip(), company_element.text.strip(), location_element.text.strip(), application_link))
+	all_companies = {}
+	for company in companies:
+		products_link_fragment = company.find_all('a')[0]['href']
+		products_link_beginning = 'https://info.nsf.org'
+		products_link = products_link_beginning + products_link_fragment
+		company_name = company.find('a').text.strip()
 
-	return all_jobs
+		formatted_company_name = handle_duplicates(all_companies, company_name)
+		all_companies[formatted_company_name] = products_link
+
+	return all_companies
 
 
-def desired_jobs_only_list(scraped_jobs: list, titles: list) -> list:
+def handle_duplicates(companies_dict: dict, name: str) -> str:
 	"""
-	Takes a list of jobs and a list of job titles you'd like to identify.
-	Returns: A list of tuples containing only jobs relevant to the passed titles
-	"""
-
-	desired_jobs = []
-
-	for job in scraped_jobs:
-		for title in titles:
-			if title in job[0].lower():
-				desired_jobs.append(job)
-
-	return desired_jobs
-
-
-def desired_jobs_only(scraped_jobs: list, *titles: str) -> list:
-	"""
-	Takes a list of jobs and an arbitrary number of job titles you'd like to identify from that list. 
-	Returns: A list of tuples containing only jobs relevant to the passed titles
+	Takes the dictionary of existing companies and if the entry is a duplicate, appends a unique
+	identifying string.
+	Returns the new, unique company entry name
 	"""
 
-	desired_jobs = []
+	entry_count = 2
+	while True:
+		if name in companies_dict:
+			if entry_count == 2:
+				name = name + ' (entry 2)'
+				entry_count += 1
 
-	for job in scraped_jobs:
-		for title in titles:
-			if title in job[0].lower():
-				desired_jobs.append(job)
+			elif entry_count > 2:
+				previous_entry_substring = f'(entry {entry_count - 1})'
+				updated_entry_substring = f'(entry {entry_count})'
+				name = name.replace(previous_entry_substring,
+													updated_entry_substring)
+				entry_count += 1
+		else:
+			break
 
-	return desired_jobs
+	return name
 
 
-def output_useful_job_details(jobs_scrape: list, titles: list) -> None:
+def desired_companies_only(scraped_companies: dict, name: str) -> dict:
+	"""
+	Takes the dictionary of scraped companies and the company name input by the user.
+	Returns: A dictionary containing only companies relevant to the user input, where the key is
+	the company name and the value is the corresponding link to the company's certification
+	details page.
+	"""
+
+	desired_companies = {}
+	for company in scraped_companies:
+		if name in company.lower().strip(',.') or name in company.strip(',.'):
+			desired_companies[company] = scraped_companies[company]
+
+	return desired_companies
+
+
+
+def output_useful_company_details(companies_scrape: dict, name: str) -> None:
 	"""
 	Takes the scraped information for desired jobs as a list of tuples, and the name of the
 	titles as a list of strings.
@@ -73,8 +88,8 @@ def output_useful_job_details(jobs_scrape: list, titles: list) -> None:
 	"""
 
 	print('_' * 40)
-	print(f'{len(jobs_scrape)} matching open roles for "{" ".join(titles)}": ', '\n')
-	for role in jobs_scrape:
-		print('Details: ', role[:-1])
-		print('Apply here:', role[-1])
+	print(f'{len(companies_scrape)} matching listings for "{name}": ', '\n')
+	for company in companies_scrape:
+		print('Company name: ', company)
+		print('Details:', companies_scrape[company])
 		print()
