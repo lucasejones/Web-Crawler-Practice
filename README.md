@@ -29,8 +29,10 @@ The certification organizations are:
 
 
 ### Implementation
-I intend to put the results from all 7 sites into a database, so when the user starts 
-typing it into the site, this input queries the database and auto-completes any matching results 
+I intend to put the results from all 7 sites into a database, which will be accessed through 
+user input on the Django site. When the user starts 
+typing the company in question into the text field, this input queries the database and 
+auto-completes any matching results 
 (name, organization name, and link) underneath.
 Then, when the user presses enter in their search, whatever links are displayed underneath become 
 clickable, which when clicked redirect to the corresponding certification site.
